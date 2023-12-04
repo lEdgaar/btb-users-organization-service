@@ -11,7 +11,9 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Organization {
+public class Organization extends BaseModel<Long> {
+
+    private static final long serialVersionUID = 1L;
 
     private long id;
 
@@ -25,4 +27,8 @@ public class Organization {
 
     private boolean isDeleted;
 
+    @Override
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

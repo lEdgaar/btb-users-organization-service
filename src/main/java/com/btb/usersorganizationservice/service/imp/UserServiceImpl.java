@@ -11,4 +11,10 @@ public class UserServiceImpl implements UserService {
     public String login(LoginDTO loginDTO) {
         return null;
     }
+
+    @Override
+    public void logout() {
+
+    }
+
 }

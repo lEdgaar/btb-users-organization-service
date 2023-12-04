@@ -47,4 +47,5 @@ public class User extends BaseModel<Long> {
     public void setId(Long id) {
         this.id = id;
     }
+
 }

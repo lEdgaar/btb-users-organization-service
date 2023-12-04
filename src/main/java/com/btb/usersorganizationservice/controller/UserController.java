@@ -20,11 +20,14 @@ public class UserController {
 
     @PostMapping("/login")
     public @ResponseBody String login(@RequestBody LoginDTO loginDTO) {
-        log.trace("POST /user/login email: {}", loginDTO.getEmail());
-
-        log.info("IMPORTANT: EventType: Code: {} Description: It has been successfully logged in");
 
         return userService.login(loginDTO);
+    }
+
+    @PostMapping("/logout")
+    public void logout() {
+
+        userService.logout();
     }
 
 }

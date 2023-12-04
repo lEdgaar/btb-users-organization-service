@@ -5,19 +5,30 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Country extends BaseModel<Long>{
+public class Chat extends BaseModel<Long> {
 
     private static final long serialVersionUID = 1L;
 
-    private long id;
+    private Long id;
 
-    private String name;
+    private Long userSendedId;
 
-    private String countryCode;
+    private Long userRecivedId;
+
+    private String message;
+
+    private Date createdAt;
+
+    @Override
+    public Long getId() {
+        return this.id;
+    }
 
     @Override
     public void setId(Long id) {

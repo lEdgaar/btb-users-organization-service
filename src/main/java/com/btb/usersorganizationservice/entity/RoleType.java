@@ -9,12 +9,19 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RoleType {
+public class RoleType extends BaseModel<Long> {
+
+    private static final long serialVersionUID = 1L;
 
     private long id;
 
     private String name;
 
     private String internalCode;
+
+    @Override
+    public void setId(Long id) {
+        this.id = id;
+    }
 
 }
