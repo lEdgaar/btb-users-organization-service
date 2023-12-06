@@ -15,9 +15,14 @@ public class Country extends BaseModel<Long>{
 
     private long id;
 
-    private String name;
+    private String countryName;
 
     private String countryCode;
+
+    @Override
+    public Long getId() {
+        return this.id;
+    }
 
     @Override
     public void setId(Long id) {

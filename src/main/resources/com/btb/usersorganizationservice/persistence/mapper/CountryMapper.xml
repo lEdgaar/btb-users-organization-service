@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.btb.usersorganizationservice.persistence.mapper.CountryMapper">
+
+    <cache/>
+
+    <sql id="tableName">COUNTRIES</sql>
+
+    <resultMap id="resultMap" type="com.btb.usersorganizationservice.entity.Country">
+
+        <id property="id" column="ID" javaType="Long" jdbcType="BIGINT" />
+
+        <result property="countryName" column="COUNTRY_NAME" javaType="String" jdbcType="VARCHAR" />
+
+        <result property="countryCode" column="COUNTRY_CODE" javaType="String" jdbcType="VARCHAR" />
+
+    </resultMap>
+
+    <sql id="selectColumnNamesClause">
+        RES.ID,
+		RES.COUNTRY_NAME,
+		RES.COUNTRY_CODE
+    </sql>
+
+    <sql id="whereFilteredClause">
+        <if test="id != null">
+            AND RES.ID=#{id}
+        </if>
+        <if test="countryName != null">
+            AND RES.COUNTRY_NAME=#{countryName}
+        </if>
+        <if test="countryCode != null">
+            AND RES.COUNTRY_CODE=#{countryCode}
+        </if>
+    </sql>
+
+    <sql id="insertColumnNamesClause">
+        COUNTRY_NAME
+        ,COUNTRY_CODE
+    </sql>
+
+    <sql id="insertValuesClause">
+        #{countryName}
+        ,#{countryCode}
+    </sql>
+
+    <sql id="updateSetClause">
+        COUNTRY_NAME=#{countryName}
+        ,COUNTRY_CODE=#{negocioDesc}
+    </sql>
+
+    <select id="findById" resultMap="resultMap" parameterType="Long" useCache="true" flushCache="false">
+        select
+        <include refid="selectColumnNamesClause" />
+        from
+        <include refid="tableName" />
+        RES
+        where
+        RES.ID=#{value}
+    </select>
+
+    <select id="findByCountryCode" resultMap="resultMap" parameterType="String" useCache="true" flushCache="false">
+        select
+        <include refid="selectColumnNamesClause" />
+        from
+        <include refid="tableName" />
+        RES
+        where
+        RES.COUNTRY_CODE =#{value}
+    </select>
+
+    <select id="findAll" resultMap="resultMap">
+        select
+        <include refid="selectColumnNamesClause" />
+        from
+        <include refid="tableName" />
+        RES
+        order by
+        RES.ID asc
+    </select>
+
+    <select id="findByFilter" resultMap="resultMap"
+            parameterType="com.btb.usersorganizationservice.entity.Country">
+        select
+        <include refid="selectColumnNamesClause" />
+        from
+        <include refid="tableName" />
+        RES
+        where 1=1
+        <include refid="whereFilteredClause" />
+        order by
+        RES.ID asc
+    </select>
+
+
+    <insert id="save" parameterType="com.btb.usersorganizationservice.entity.Country"
+            useGeneratedKeys="true" keyColumn="ID" keyProperty="id" flushCache="true">
+        insert into
+        <include refid="tableName" />
+        (
+        <include refid="insertColumnNamesClause" />
+        )
+        values
+        (
+        <include refid="insertValuesClause" />
+        )
+    </insert>
+
+    <update id="update" parameterType="com.btb.usersorganizationservice.entity.Country" flushCache="true">
+        update
+        <include refid="tableName" />
+        set
+        <include refid="updateSetClause" />
+        where
+        ID=#{id}
+    </update>
+
+    <delete id="delete" parameterType="Long" flushCache="true">
+        delete from
+        <include refid="tableName" />
+        where
+        ID=#{value}
+    </delete>
+
+</mapper>

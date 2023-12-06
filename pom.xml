@@ -15,6 +15,7 @@
 	<description>Microservice for Users and Organizations domain</description>
 	<properties>
 		<java.version>17</java.version>
+		<start-class>com.btb.usersorganizationservice.UsersorganizationserviceApplication</start-class>
 	</properties>
 	<dependencies>
 		<dependency>

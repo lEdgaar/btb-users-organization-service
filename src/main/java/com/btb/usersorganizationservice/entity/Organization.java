@@ -17,7 +17,7 @@ public class Organization extends BaseModel<Long> {
 
     private long id;
 
-    private String name;
+    private String organizationName;
 
     private String description;
 
@@ -26,6 +26,11 @@ public class Organization extends BaseModel<Long> {
     private Date createdAt;
 
     private boolean isDeleted;
+
+    @Override
+    public Long getId() {
+        return this.id;
+    }
 
     @Override
     public void setId(Long id) {

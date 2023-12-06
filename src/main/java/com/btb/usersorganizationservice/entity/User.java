@@ -44,6 +44,11 @@ public class User extends BaseModel<Long> {
     private Country country;
 
     @Override
+    public Long getId() {
+        return this.id;
+    }
+
+    @Override
     public void setId(Long id) {
         this.id = id;
     }

@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.btb.usersorganizationservice.persistence.mapper.UserMapper">
+
+    <sql id="tableName">USERS</sql>
+
+    <resultMap id="resultMap" type="com.btb.usersorganizationservice.entity.User">
+
+        <id property="id" column="ID" javaType="Long" jdbcType="BIGINT" />
+
+        <result property="email" column="EMAIL" javaType="String" jdbcType="VARCHAR" />
+
+        <result property="createdAt" column="CREATED_AT" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+
+        <result property="dateOfBirth" column="DATE_OF_BIRTH" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+
+        <result property="gender" column="GENDER" javaType="String" jdbcType="CHAR" />
+
+        <result property="password" column="PASSWORD" javaType="String" jdbcType="VARCHAR" />
+
+        <result property="lastPasswordDate" column="LAST_PASSWORD_DATE" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+
+        <result property="isDeleted" column="IS_DELETED" javaType="Boolean" jdbcType="BOOLEAN"/>
+
+        <result property="dateDeleted" column="DATE_DELETED" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+
+        <result property="isBlocked" column="IS_BLOCKED" javaType="Boolean" jdbcType="BOOLEAN"/>
+
+        <result property="dateBlocked" column="DATE_BLOCKED" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+
+        <association property="roleType" column="role_type_id" javaType="com.btb.usersorganizationservice.entity.RoleType"
+                     fetchType="lazy" select="com.btb.usersorganizationservice.persistence.mapper.RoleTypeMapper.findById"/>
+
+        <association property="organization" column="organization_id" javaType="com.btb.usersorganizationservice.entity.Organization"
+                     fetchType="lazy" select="com.btb.usersorganizationservice.persistence.mapper.OrganizationMapper.findById"/>
+
+        <association property="country" column="country_id" javaType="com.btb.usersorganizationservice.entity.Country"
+                     fetchType="lazy" select="com.btb.usersorganizationservice.persistence.mapper.CountryMapper.findById"/>
+
+    </resultMap>
+
+    <sql id="selectColumnNamesClause">
+        RES.ID,
+        RES.EMAIL,
+        RES.CREATED_AT,
+        RES.DATE_OF_BIRTH,
+        RES.GENDER,
+        RES.PASSWORD,
+        RES.LAST_PASSWORD_DATE,
+        RES.IS_DELETED,
+        RES.DATE_DELETED,
+        RES.IS_BLOCKED,
+        RES.DATE_BLOCKED,
+        RES.ROLE_TYPE_ID,
+        RES.ORGANIZATION_ID,
+        RES.COUNTRY_ID
+    </sql>
+
+    <sql id="whereFilteredClause">
+        <if test="id != null">
+            AND RES.ID=#{id}
+        </if>
+        <if test="email != null">
+            AND RES.EMAIL=#{email}
+        </if>
+        <if test="createdAt != null">
+            AND RES.CREATED_AT=#{createdAt}
+        </if>
+        <if test="dateOfBirth != null">
+            AND RES.DATE_OF_BIRTH=#{dateOfBirth}
+        </if>
+        <if test="gender != null">
+            AND RES.GENDER=#{gender}
+        </if>
+        <if test="password != null">
+            AND RES.PASSWORD=#{password}
+        </if>
+        <if test="lastPasswordDate != null">
+            AND RES.LAST_PASSWORD_DATE=#{lastPasswordDate}
+        </if>
+        <if test="isDeleted != null">
+            AND RES.IS_DELETED=#{isDeleted}
+        </if>
+        <if test="dateDeleted != null">
+            AND RES.DATE_DELETED=#{dateDeleted}
+        </if>
+        <if test="isBlocked != null">
+            AND RES.IS_BLOCKED=#{isBlocked}
+        </if>
+        <if test="dateBlocked != null">
+            AND RES.DATE_BLOCKED=#{dateBlocked}
+        </if>
+        <if test="roleType != null and roleType.id != null">
+            AND RES.ROLE_TYPE_ID=#{roleType.id}
+        </if>
+        <if test="organization != null and organization.id != null">
+            AND RES.ORGANIZATION_ID=#{organization.id}
+        </if>
+        <if test="country != null and country.id != null">
+            AND RES.COUNTRY_ID=#{country.id}
+        </if>
+    </sql>
+
+    <sql id="insertColumnNamesClause">
+        EMAIL,
+        CREATED_AT,
+        DATE_OF_BIRTH,
+        GENDER,
+        PASSWORD,
+        LAST_PASSWORD_DATE,
+        IS_DELETED,
+        DATE_DELETED,
+        IS_BLOCKED,
+        DATE_BLOCKED,
+        ROLE_TYPE_ID,
+        ORGANIZATION_ID,
+        COUNTRY_ID
+    </sql>
+
+    <sql id="insertValuesClause">
+        #{email}
+        ,#{createdAt}
+        ,#{dateOfBirth}
+        ,#{gender}
+        ,#{password}
+        ,#{lastPasswordDate}
+        ,#{isDeleted}
+        ,#{dateDeleted}
+        ,#{isBlocked}
+        ,#{dateBlocked}
+        ,#{roleType.id}
+        ,#{organization.id}
+        ,#{country.id}
+    </sql>
+
+    <sql id="updateSetClause">
+        DATE_OF_BIRTH=#{dateOfBirth}
+        ,GENDER=#{gender}
+        ,PASSWORD=#{password}
+        ,LAST_PASSWORD_DATE=#{lastPasswordDate}
+        ,IS_DELETED=#{isDeleted}
+        ,DATE_DELETED=#{dateDeleted}
+        ,IS_BLOCKED=#{isBlocked}
+        ,DATE_BLOCKED=#{dateBlocked}
+        ,ROLE_TYPE_ID=#{roleType.id}
+        ,COUNTRY_ID=#{country.id}
+    </sql>
+
+    <select id="findById" resultMap="resultMap" parameterType="Long">
+        select
+        <include refid="selectColumnNamesClause" />
+        from
+        <include refid="tableName" />
+        RES
+        where
+        RES.ID=#{value}
+    </select>
+
+    <select id="findAll" resultMap="resultMap">
+        select
+        <include refid="selectColumnNamesClause" />
+        from
+        <include refid="tableName" />
+        RES
+        order by
+        RES.ID asc
+    </select>
+
+    <select id="findByFilter" resultMap="resultMap"
+            parameterType="com.btb.usersorganizationservice.entity.User">
+        select
+        <include refid="selectColumnNamesClause" />
+        from
+        <include refid="tableName" />
+        RES
+        where 1=1
+        <include refid="whereFilteredClause" />
+        order by
+        RES.ID asc
+    </select>
+
+
+    <insert id="save" parameterType="com.btb.usersorganizationservice.entity.User"
+            useGeneratedKeys="true" keyColumn="ID_" keyProperty="id">
+        insert into
+        <include refid="tableName" />
+        (
+        <include refid="insertColumnNamesClause" />
+        )
+        values
+        (
+        <include refid="insertValuesClause" />
+        )
+    </insert>
+
+    <update id="update" parameterType="com.btb.usersorganizationservice.entity.User">
+        update
+        <include refid="tableName" />
+        set
+        <include refid="updateSetClause" />
+        where
+        ID=#{id}
+    </update>
+
+    <delete id="delete" parameterType="Long">
+        delete from
+        <include refid="tableName" />
+        where
+        ID=#{value}
+    </delete>
+
+</mapper>

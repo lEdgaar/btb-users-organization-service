@@ -5,7 +5,9 @@ import com.btb.usersorganizationservice.dto.AddChatDTO;
 import com.btb.usersorganizationservice.dto.UpdateBrokerDTO;
 import com.btb.usersorganizationservice.entity.Chat;
 import com.btb.usersorganizationservice.entity.User;
+import com.btb.usersorganizationservice.persistence.mapper.UserMapper;
 import com.btb.usersorganizationservice.service.BrokerService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,9 +15,12 @@ import java.util.List;
 @Service
 public class BrokerServiceImpl implements BrokerService {
 
+    @Autowired
+    private UserMapper userMapper;
+
     @Override
     public List<User> getBrokers() {
-        return null;
+        return userMapper.findAll();
     }
 
     @Override

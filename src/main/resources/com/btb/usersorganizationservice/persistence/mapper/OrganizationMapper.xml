@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.btb.usersorganizationservice.persistence.mapper.OrganizationMapper">
+
+    <sql id="tableName">ORGANIZATIONS</sql>
+
+    <resultMap id="resultMap" type="com.btb.usersorganizationservice.entity.Organization">
+
+        <id property="id" column="ID" javaType="Long" jdbcType="BIGINT" />
+
+        <result property="organizationName" column="ORGANIZATION_NAME" javaType="String" jdbcType="VARCHAR" />
+
+        <result property="description" column="DESCRIPTION" javaType="String" jdbcType="VARCHAR" />
+
+        <result property="urlPicture" column="URL_PICTURE" javaType="String" jdbcType="VARCHAR" />
+
+        <result property="createdAt" column="CREATED_AT" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+
+        <result property="isDeleted" column="IS_DELETED" javaType="Boolean" jdbcType="BOOLEAN"/>
+
+    </resultMap>
+
+    <sql id="selectColumnNamesClause">
+        RES.ID,
+		RES.ORGANIZATION_NAME,
+		RES.DESCRIPTION,
+        RES.URL_PICTURE,
+        RES.CREATED_AT,
+        RES.IS_DELETED
+    </sql>
+
+    <sql id="whereFilteredClause">
+        <if test="id != null">
+            AND RES.ID=#{id}
+        </if>
+        <if test="organizationName != null">
+            AND RES.ORGANIZATION_NAME=#{organizationName}
+        </if>
+        <if test="description != null">
+            AND RES.DESCRIPTION=#{description}
+        </if>
+        <if test="urlPicture != null">
+            AND RES.URL_PICTURE=#{urlPicture}
+        </if>
+        <if test="createdAt != null">
+            AND RES.CREATED_AT=#{createdAt}
+        </if>
+        <if test="isDeleted != null">
+            AND RES.IS_DELETED=#{isDeleted}
+        </if>
+    </sql>
+
+    <sql id="insertColumnNamesClause">
+        ORGANIZATION_NAME
+        ,DESCRIPTION
+        ,URL_PICTURE
+        ,CREATED_AT
+        ,IS_DELETED
+    </sql>
+
+    <sql id="insertValuesClause">
+        #{organizationName}
+        ,#{description}
+        ,#{urlPicture}
+        ,#{createdAt}
+        ,#{isDeleted}
+    </sql>
+
+    <sql id="updateSetClause">
+        ORGANIZATION_NAME=#{organizationName}
+        ,DESCRIPTION=#{description}
+        ,URL_PICTURE=#{urlPicture}
+        ,CREATED_AT=#{createdAt}
+        ,IS_DELETED=#{isDeleted}
+    </sql>
+
+    <select id="findById" resultMap="resultMap" parameterType="Long">
+        select
+        <include refid="selectColumnNamesClause" />
+        from
+        <include refid="tableName" />
+        RES
+        where
+        RES.ID=#{value}
+    </select>
+
+    <select id="findAll" resultMap="resultMap">
+        select
+        <include refid="selectColumnNamesClause" />
+        from
+        <include refid="tableName" />
+        RES
+        order by
+        RES.ID asc
+    </select>
+
+    <select id="findByFilter" resultMap="resultMap"
+            parameterType="com.btb.usersorganizationservice.entity.Organization">
+        select
+        <include refid="selectColumnNamesClause" />
+        from
+        <include refid="tableName" />
+        RES
+        where 1=1
+        <include refid="whereFilteredClause" />
+        order by
+        RES.ID asc
+    </select>
+
+
+    <insert id="save" parameterType="com.btb.usersorganizationservice.entity.Organization"
+            useGeneratedKeys="true" keyColumn="ID" keyProperty="id">
+        insert into
+        <include refid="tableName" />
+        (
+        <include refid="insertColumnNamesClause" />
+        )
+        values
+        (
+        <include refid="insertValuesClause" />
+        )
+    </insert>
+
+    <update id="update" parameterType="com.btb.usersorganizationservice.entity.Organization">
+        update
+        <include refid="tableName" />
+        set
+        <include refid="updateSetClause" />
+        where
+        ID=#{id}
+    </update>
+
+    <delete id="delete" parameterType="Long">
+        delete from
+        <include refid="tableName" />
+        where
+        ID=#{value}
+    </delete>
+
+</mapper>
