@@ -1,9 +1,9 @@
 package com.btb.usersorganizationservice.common.validation.validators;
 
 import com.btb.usersorganizationservice.common.validation.annotations.NotNullOrEmpty;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
 
 public class NotNullOrEmptyValidator implements ConstraintValidator<NotNullOrEmpty, CharSequence> {
 
