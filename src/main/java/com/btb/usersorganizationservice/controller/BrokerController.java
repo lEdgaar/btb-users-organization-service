@@ -48,22 +48,16 @@ public class BrokerController {
         brokerService.deleteBroker(brokerId);
     }
 
+    @GetMapping("/")
+    public @ResponseBody List<User> searchBrokerByName(@RequestParam String name) {
+
+        return brokerService.getBrokerLikeName(name);
+    }
+
     @GetMapping("/{brokerId}")
-    public @ResponseBody User getBrokerById(@PathVariable("brokoerId") Long brokerId) {
+    public @ResponseBody User searchBrokerById(@PathVariable("brokerId") Long brokerId) {
 
         return brokerService.getBrokerById(brokerId);
-    }
-
-    @GetMapping("/{brokerId}/messages")
-    public @ResponseBody List<Chat> getMessagesByBrokerId(@PathVariable("brokerId") Long brokerId) {
-
-        return brokerService.getMessagesByBrokerId(brokerId);
-    }
-
-    @PostMapping("/{brokerId}/chat/{recipientId}")
-    public void addChat(@PathVariable("brokerId") Long brokerId, @PathVariable("recipientId") Long recipientId, @RequestBody AddChatDTO addChatDTO) {
-
-        brokerService.addChat(brokerId, recipientId, addChatDTO);
     }
 
 }

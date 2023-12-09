@@ -27,6 +27,8 @@ public class Organization extends BaseModel<Long> {
 
     private boolean isDeleted;
 
+    private Date deletedDate; // NUEVO
+
     @Override
     public Long getId() {
         return this.id;

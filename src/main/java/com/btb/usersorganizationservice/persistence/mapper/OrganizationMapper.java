@@ -1,4 +1,6 @@
 package com.btb.usersorganizationservice.persistence.mapper;
 
-public interface OrganizationMapper {
+import com.btb.usersorganizationservice.entity.Organization;
+
+public interface OrganizationMapper extends CommonMapper<Organization, Long>{
 }

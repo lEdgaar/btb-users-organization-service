@@ -6,6 +6,4 @@ public interface UserService {
 
     String login(LoginDTO loginDTO);
 
-    void logout();
-
 }

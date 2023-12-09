@@ -1,4 +1,6 @@
 package com.btb.usersorganizationservice.persistence.mapper;
 
-public interface ChatMapper {
+import com.btb.usersorganizationservice.entity.Chat;
+
+public interface ChatMapper extends CommonMapper<Chat, Long>{
 }

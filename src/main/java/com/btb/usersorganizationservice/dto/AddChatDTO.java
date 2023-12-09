@@ -11,6 +11,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class AddChatDTO {
 
+    private Long brokerId;
+
     private String message;
 
 }

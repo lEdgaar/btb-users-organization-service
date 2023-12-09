@@ -19,6 +19,10 @@ public class User extends BaseModel<Long> {
 
     private String email;
 
+    private String firstName; // NUEVO
+
+    private String surname; // NUEVO
+
     private Date createdAt;
 
     private Date dateOfBirth;

@@ -4,6 +4,7 @@ import com.btb.usersorganizationservice.dto.AddBrokerDTO;
 import com.btb.usersorganizationservice.dto.AddChatDTO;
 import com.btb.usersorganizationservice.dto.UpdateBrokerDTO;
 import com.btb.usersorganizationservice.entity.Chat;
+import com.btb.usersorganizationservice.entity.Organization;
 import com.btb.usersorganizationservice.entity.User;
 
 import java.util.List;
@@ -18,10 +19,9 @@ public interface BrokerService {
 
     void deleteBroker(Long brokerId);
 
+    List<User> getBrokerLikeName(String name);
+
     User getBrokerById(Long brokerId);
 
-    List<Chat> getMessagesByBrokerId(Long brokerId);
-
-    void addChat(Long brokerId, Long recipientId, AddChatDTO addChatDTO);
-
+    void setBrokerToOrganization(Long brokerId, Organization organization);
 }

@@ -24,10 +24,4 @@ public class UserController {
         return userService.login(loginDTO);
     }
 
-    @PostMapping("/logout")
-    public void logout() {
-
-        userService.logout();
-    }
-
 }
