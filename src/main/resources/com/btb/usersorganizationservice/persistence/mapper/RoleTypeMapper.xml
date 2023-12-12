@@ -6,7 +6,7 @@
 
     <cache/>
 
-    <sql id="tableName">USERS</sql>
+    <sql id="tableName">ROLE_TYPE</sql>
 
     <resultMap id="resultMap" type="com.btb.usersorganizationservice.entity.RoleType">
 
