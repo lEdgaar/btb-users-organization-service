@@ -1,14 +1,13 @@
 package com.btb.usersorganizationservice.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import io.swagger.v3.oas.annotations.info.Contact;
+import lombok.*;
 
 import java.util.Date;
 
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class User extends BaseModel<Long> {

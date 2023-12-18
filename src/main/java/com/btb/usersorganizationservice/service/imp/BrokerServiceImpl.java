@@ -10,6 +10,7 @@ import com.btb.usersorganizationservice.persistence.mapper.UserMapper;
 import com.btb.usersorganizationservice.service.BrokerService;
 import com.btb.usersorganizationservice.service.CountryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -32,14 +33,17 @@ public class BrokerServiceImpl implements BrokerService {
 
     @Override
     public void addBroker(AddBrokerDTO addBrokerDTO) {
-        User user = new User();
-        user.setFirstName(addBrokerDTO.getFirstName());
-        user.setSurname(addBrokerDTO.getSurname());
-        user.setEmail(addBrokerDTO.getEmail());
-        user.setDateOfBirth(addBrokerDTO.getDateOfBirth());
-        user.setPassword(addBrokerDTO.getPassword());
-        user.setGender(addBrokerDTO.getGender());
-        user.setCountry(countryService.getCountryByCountryCode(addBrokerDTO.getCountryCode()));
+
+        User user = User
+                .builder()
+                .email(addBrokerDTO.getEmail())
+                .password(new BCryptPasswordEncoder().encode(addBrokerDTO.getPassword()))
+                .firstName(addBrokerDTO.getFirstName())
+                .surname(addBrokerDTO.getSurname())
+                .dateOfBirth(addBrokerDTO.getDateOfBirth())
+                .gender(addBrokerDTO.getGender())
+                .country(countryService.getCountryByCountryCode(addBrokerDTO.getCountryCode()))
+                .build();
 
         userMapper.save(user);
     }
@@ -52,7 +56,7 @@ public class BrokerServiceImpl implements BrokerService {
             user.setFirstName(updateBrokerDTO.getFirstName());
             user.setSurname(updateBrokerDTO.getSurname());
             user.setDateOfBirth(updateBrokerDTO.getDateOfBirth());
-            user.setPassword(updateBrokerDTO.getPassword());
+            user.setPassword(new BCryptPasswordEncoder().encode(updateBrokerDTO.getPassword()));
             user.setGender(updateBrokerDTO.getGender());
             user.setDeleted(updateBrokerDTO.isDeleted());
             user.setCountry(countryService.getCountryByCountryCode(updateBrokerDTO.getCountryCode()));

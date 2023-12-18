@@ -48,7 +48,7 @@
 
     <sql id="updateSetClause">
         ROLE_NAME=#{roleName}
-        ,ROLE_CODE=#{negocioDesc}
+        ,ROLE_CODE=#{roleCode}
     </sql>
 
     <select id="findById" resultMap="resultMap" parameterType="Long" useCache="true" flushCache="false">

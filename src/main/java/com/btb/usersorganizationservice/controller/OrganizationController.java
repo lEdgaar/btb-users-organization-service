@@ -23,31 +23,41 @@ public class OrganizationController {
 
     @GetMapping("/")
     public @ResponseBody List<Organization> getOrganizations() {
+        log.trace("GET /organizations");
 
+        log.info("Event: Get organizations");
         return organizationService.getOrganizations();
     }
 
     @PostMapping("/")
     public void addOrganization(@RequestBody AddOrganizationDTO addOrganizationDTO) {
+        log.trace("POST /organizations {}", addOrganizationDTO.getName());
 
+        log.info("Event: Add organization: {}", addOrganizationDTO.getName());
         organizationService.addOrganization(addOrganizationDTO);
     }
 
     @PutMapping("/{organizationId}")
     public void updateOrganization(@PathVariable("organizationId") Long organizationId, @RequestBody AddOrganizationDTO addOrganizationDTO) {
+        log.trace("PUT /organizations/{}", organizationId);
 
+        log.info("Event: Update organization: {}", organizationId);
         organizationService.updateOrganization(organizationId, addOrganizationDTO);
     }
 
     @DeleteMapping("/{organizationId}")
     public void deleteOrganization(@PathVariable("organizationId") Long organizationId) {
+        log.trace("DELETE /organizations/{}", organizationId);
 
+        log.info("Event: Delete organization: {}", organizationId);
         organizationService.deleteOrganization(organizationId);
     }
 
     @PostMapping("/{organizationId}/add-broker/{brokerId}")
     public void addBrokerToOrganization(@PathVariable("organizationId") Long organizationId, @PathVariable("brokerId") Long brokerId) {
+        log.trace("POST /organizations/{}/add-broker/{}", organizationId, brokerId);
 
+        log.info("Event: Add broker: {} to organization: {}", brokerId, organizationId);
         organizationService.addBrokerToOrganization(organizationId, brokerId);
     }
 

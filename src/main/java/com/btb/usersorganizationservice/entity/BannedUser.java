@@ -5,19 +5,27 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BannedUser extends BaseModel<Long> {
+public class BannedUser extends BaseModel<Long>{
 
     private static final long serialVersionUID = 1L;
 
     private Long id;
 
-    private String reason;
+    private User user;
 
-    private boolean isVisible;
+    private BanReason banReason;
+
+    private Date startDate;
+
+    private Date endDate;
+
+    private boolean isFinished;
 
 
     @Override
@@ -29,4 +37,5 @@ public class BannedUser extends BaseModel<Long> {
     public void setId(Long id) {
         this.id = id;
     }
+
 }
