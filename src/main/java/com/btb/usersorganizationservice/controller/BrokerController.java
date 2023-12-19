@@ -26,7 +26,7 @@ public class BrokerController {
 
     @GetMapping("/")
     public @ResponseBody List<User> getBrokers() {
-        log.trace("GET /brokers");
+        log.info("GET /brokers");
 
         log.info("Event: Get brokers");
         return brokerService.getBrokers();
@@ -34,7 +34,7 @@ public class BrokerController {
 
     @PostMapping("/")
     public void addBroker(@RequestBody AddBrokerDTO addBrokerDTO) {
-        log.trace("POST /brokers {}", addBrokerDTO.getEmail());
+        log.info("POST /brokers {}", addBrokerDTO.getEmail());
 
         log.info("Event: Add broker: {}", addBrokerDTO.getEmail());
         brokerService.addBroker(addBrokerDTO);
@@ -42,7 +42,7 @@ public class BrokerController {
 
     @PutMapping("/{brokerId}")
     public void updateBroker(@PathVariable("brokerId") Long brokerId, @RequestBody UpdateBrokerDTO updateBrokerDTO) {
-        log.trace("PUT /brokers/{}", brokerId);
+        log.info("PUT /brokers/{}", brokerId);
 
         log.info("Event: Update broker: {}", brokerId);
         brokerService.updateBroker(brokerId, updateBrokerDTO);
@@ -50,15 +50,15 @@ public class BrokerController {
 
     @DeleteMapping("/{brokerId}")
     public void deleteBroker(@PathVariable("brokerId") Long brokerId) {
-        log.trace("DELETE /brokers/{}", brokerId);
+        log.info("DELETE /brokers/{}", brokerId);
 
         log.info("Event: Delete broker: {}", brokerId);
         brokerService.deleteBroker(brokerId);
     }
 
-    @GetMapping("/")
+    @GetMapping("/search")
     public @ResponseBody List<User> searchBrokerByName(@RequestParam String name) {
-        log.trace("GET /brokers?name={}", name);
+        log.info("GET /brokers?name={}", name);
 
         log.info("Event: Search broker by name: {}", name);
         return brokerService.getBrokerLikeName(name);
@@ -66,7 +66,7 @@ public class BrokerController {
 
     @GetMapping("/{brokerId}")
     public @ResponseBody User searchBrokerById(@PathVariable("brokerId") Long brokerId) {
-        log.trace("GET /brokers/{}", brokerId);
+        log.info("GET /brokers/{}", brokerId);
 
         log.info("Event: Search broker by id: {}", brokerId);
         return brokerService.getBrokerById(brokerId);
