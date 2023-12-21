@@ -17,9 +17,9 @@ public class Chat extends BaseModel<Long> {
 
     private Long id;
 
-    private Long userSendedId;
+    private User userSendedId;
 
-    private Long userRecivedId;
+    private User userRecivedId;
 
     private String message;
 

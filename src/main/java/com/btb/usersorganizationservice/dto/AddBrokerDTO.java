@@ -1,9 +1,11 @@
 package com.btb.usersorganizationservice.dto;
 
 import com.btb.usersorganizationservice.common.validation.annotations.NotNullOrEmpty;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.executable.ValidateOnExecution;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,11 +33,9 @@ public class AddBrokerDTO {
     private String email;
 
     @Past
-    @NotNullOrEmpty
+    @JsonFormat(pattern="dd-MM-yyyy")
     private Date dateOfBirth;
 
-    @Size(max = 1)
-    @NotNullOrEmpty
     private char gender;
 
     @Size(max = 25)

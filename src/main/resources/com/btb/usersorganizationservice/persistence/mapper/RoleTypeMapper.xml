@@ -14,7 +14,7 @@
 
         <result property="roleName" column="ROLE_NAME" javaType="String" jdbcType="VARCHAR" />
 
-        <result property="roleCode" column="ROLE_CODE" javaType="String" jdbcType="VARCHAR" />
+        <result property="internalCode" column="ROLE_CODE" javaType="String" jdbcType="VARCHAR" />
 
     </resultMap>
 
@@ -31,8 +31,8 @@
         <if test="roleName != null">
             AND RES.ROLE_NAME=#{roleName}
         </if>
-        <if test="roleCode != null">
-            AND RES.ROLE_CODE=#{roleCode}
+        <if test="internalCode != null">
+            AND RES.ROLE_CODE=#{internalCode}
         </if>
     </sql>
 
@@ -43,12 +43,12 @@
 
     <sql id="insertValuesClause">
         #{roleName}
-        ,#{roleCode}
+        ,#{internalCode}
     </sql>
 
     <sql id="updateSetClause">
         ROLE_NAME=#{roleName}
-        ,ROLE_CODE=#{roleCode}
+        ,ROLE_CODE=#{internalCode}
     </sql>
 
     <select id="findById" resultMap="resultMap" parameterType="Long" useCache="true" flushCache="false">

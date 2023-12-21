@@ -1,14 +1,14 @@
 package com.btb.usersorganizationservice.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+
+@Data
 @Getter
 @Setter
-@AllArgsConstructor
+@ToString
 @NoArgsConstructor
+@AllArgsConstructor
 public class RoleType extends BaseModel<Long> {
 
     private static final long serialVersionUID = 1L;
@@ -28,5 +28,7 @@ public class RoleType extends BaseModel<Long> {
     public void setId(Long id) {
         this.id = id;
     }
+
+
 
 }

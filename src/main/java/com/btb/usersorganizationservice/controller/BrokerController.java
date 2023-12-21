@@ -5,7 +5,11 @@ import com.btb.usersorganizationservice.dto.AddChatDTO;
 import com.btb.usersorganizationservice.dto.UpdateBrokerDTO;
 import com.btb.usersorganizationservice.entity.Chat;
 import com.btb.usersorganizationservice.entity.User;
+import com.btb.usersorganizationservice.exception.BrokerException;
+import com.btb.usersorganizationservice.exception.DBException;
+import com.btb.usersorganizationservice.exception.RoleTypeException;
 import com.btb.usersorganizationservice.service.BrokerService;
+import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +37,7 @@ public class BrokerController {
     }
 
     @PostMapping("/")
-    public void addBroker(@RequestBody AddBrokerDTO addBrokerDTO) {
+    public void addBroker(@Valid @RequestBody AddBrokerDTO addBrokerDTO) throws RoleTypeException, DBException, BrokerException {
         log.info("POST /brokers {}", addBrokerDTO.getEmail());
 
         log.info("Event: Add broker: {}", addBrokerDTO.getEmail());
@@ -41,7 +45,7 @@ public class BrokerController {
     }
 
     @PutMapping("/{brokerId}")
-    public void updateBroker(@PathVariable("brokerId") Long brokerId, @RequestBody UpdateBrokerDTO updateBrokerDTO) {
+    public void updateBroker(@PathVariable("brokerId") Long brokerId, @RequestBody UpdateBrokerDTO updateBrokerDTO) throws DBException, BrokerException {
         log.info("PUT /brokers/{}", brokerId);
 
         log.info("Event: Update broker: {}", brokerId);
@@ -49,7 +53,7 @@ public class BrokerController {
     }
 
     @DeleteMapping("/{brokerId}")
-    public void deleteBroker(@PathVariable("brokerId") Long brokerId) {
+    public void deleteBroker(@PathVariable("brokerId") Long brokerId) throws DBException, BrokerException {
         log.info("DELETE /brokers/{}", brokerId);
 
         log.info("Event: Delete broker: {}", brokerId);
@@ -57,15 +61,15 @@ public class BrokerController {
     }
 
     @GetMapping("/search")
-    public @ResponseBody List<User> searchBrokerByName(@RequestParam String name) {
+    public @ResponseBody List<User> searchBrokerByNameOrEmail(@RequestParam String name) throws BrokerException {
         log.info("GET /brokers?name={}", name);
 
         log.info("Event: Search broker by name: {}", name);
-        return brokerService.getBrokerLikeName(name);
+        return brokerService.getBrokerLikeNameOrEmail(name);
     }
 
     @GetMapping("/{brokerId}")
-    public @ResponseBody User searchBrokerById(@PathVariable("brokerId") Long brokerId) {
+    public @ResponseBody User searchBrokerById(@PathVariable("brokerId") Long brokerId) throws BrokerException {
         log.info("GET /brokers/{}", brokerId);
 
         log.info("Event: Search broker by id: {}", brokerId);

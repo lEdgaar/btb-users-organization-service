@@ -225,4 +225,14 @@
         ID=#{value}
     </delete>
 
+    <select id="findByEmail" resultMap="resultMap" parameterType="String">
+        select
+        <include refid="selectColumnNamesClause" />
+        from
+        <include refid="tableName" />
+        RES
+        where RES.IS_DELETED=false
+        AND RES.EMAIL LIKE #{value}
+    </select>
+
 </mapper>
