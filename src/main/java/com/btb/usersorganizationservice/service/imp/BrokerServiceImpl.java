@@ -18,6 +18,7 @@ import com.btb.usersorganizationservice.service.RoleTypeService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -37,6 +38,9 @@ public class BrokerServiceImpl implements BrokerService {
     @Autowired
     private CountryService countryService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public List<User> getBrokers() {
         return userMapper.findAll();
@@ -45,12 +49,14 @@ public class BrokerServiceImpl implements BrokerService {
     @Override
     public void addBroker(AddBrokerDTO addBrokerDTO) throws RoleTypeException, BrokerException, DBException {
         log.info("Adding broker: {}", addBrokerDTO.getEmail());
-        checkIfUserExists(addBrokerDTO.getEmail());
+        if (checkIfUserExists(addBrokerDTO.getEmail())) {
+            throw new BrokerException(BrokerErrorCode.USER_ALREADY_EXISTS, BrokerErrorCode.USER_ALREADY_EXISTS.getKey());
+        }
 
         User user = User
                 .builder()
                 .email(addBrokerDTO.getEmail())
-                .password(new BCryptPasswordEncoder().encode(addBrokerDTO.getPassword()))
+                .password(passwordEncoder.encode(addBrokerDTO.getPassword()))
                 .firstName(addBrokerDTO.getFirstName())
                 .surname(addBrokerDTO.getSurname())
                 .dateOfBirth(addBrokerDTO.getDateOfBirth())
@@ -141,6 +147,14 @@ public class BrokerServiceImpl implements BrokerService {
 
         log.info("Broker: {} set to organization: {}", brokerId, organization.getId());
     }
+
+    @Override
+    public User findUserByEmail(String email) {
+        log.info("Searching broker by email: {}", email);
+
+        return userMapper.findByEmail(email);
+    }
+
 
     private User getBroker(Long brokerId) throws BrokerException {
         if (brokerId == null) {

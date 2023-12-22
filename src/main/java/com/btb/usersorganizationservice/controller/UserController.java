@@ -1,6 +1,7 @@
 package com.btb.usersorganizationservice.controller;
 
 import com.btb.usersorganizationservice.dto.LoginDTO;
+import com.btb.usersorganizationservice.exception.BrokerException;
 import com.btb.usersorganizationservice.service.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public @ResponseBody String login(@RequestBody LoginDTO loginDTO) {
+    public @ResponseBody String login(@RequestBody LoginDTO loginDTO) throws BrokerException {
         log.info("POST /login - email: {}", loginDTO.getEmail());
 
         log.info("ImportantEvent: User login: email: {}", loginDTO.getEmail());

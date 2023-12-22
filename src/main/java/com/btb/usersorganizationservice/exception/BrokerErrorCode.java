@@ -4,7 +4,9 @@ public enum BrokerErrorCode implements ErrorCode {
     USER_ID_NOT_NULL(1, "user.id.not.null"),
     USER_NOT_FOUND(2, "user.not.found"),
     EMAIL_NOT_NULL(3, "email.not.null"),
-    NAME_OR_EMAIL_NOT_NULL(4, "name.or.email.not.null");
+    NAME_OR_EMAIL_NOT_NULL(4, "name.or.email.not.null"),
+    EMAIL_OR_PASSWORD_INCORRECT(5, "email.or.password.incorrect"),
+    USER_ALREADY_EXISTS(6, "user.already.exists");
 
     private final int code;
     private final String message;

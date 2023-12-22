@@ -28,4 +28,6 @@ public interface BrokerService {
 
     void setBrokerToOrganization(Long brokerId, Organization organization) throws BrokerException, DBException;
 
+    User findUserByEmail(String email);
+
 }

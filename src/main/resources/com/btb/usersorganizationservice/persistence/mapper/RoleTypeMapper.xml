@@ -69,6 +69,7 @@
         RES
         where
         RES.ROLE_CODE =#{value}
+        LIMIT 1
     </select>
 
     <select id="findAll" resultMap="resultMap">
