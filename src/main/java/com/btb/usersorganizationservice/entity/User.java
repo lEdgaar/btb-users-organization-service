@@ -26,7 +26,7 @@ public class User extends BaseModel<Long> {
 
     private Date dateOfBirth;
 
-    private char gender;
+    private String gender;
 
     private String password;
 

@@ -30,7 +30,7 @@ public class UpdateBrokerDTO {
 
     @Size(max = 1)
     @NotNullOrEmpty
-    private char gender;
+    private String gender;
 
     @Size(max = 25)
     @NotNullOrEmpty

@@ -36,7 +36,7 @@ public class AddBrokerDTO {
     @JsonFormat(pattern="dd-MM-yyyy")
     private Date dateOfBirth;
 
-    private char gender;
+    private String gender;
 
     @Size(max = 25)
     @NotNullOrEmpty

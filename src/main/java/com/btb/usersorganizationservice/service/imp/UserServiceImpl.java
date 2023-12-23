@@ -35,21 +35,21 @@ public class UserServiceImpl implements UserService {
     public String login(LoginDTO loginDTO) throws BrokerException {
         log.info("Login: {}", loginDTO.getEmail());
 
-        SendEventDTO sendEventDTO = new SendEventDTO();
-        sendEventDTO.setUserId(1L);
-        sendEventDTO.setDescription("Prueba");
-
-        operationsServiceClient.sendEvent(sendEventDTO);
-
         User user = brokerService.findUserByEmail(loginDTO.getEmail());
 
         if (!passwordEncoder.matches(loginDTO.getPassword(), user.getPassword())) {
             throw new BrokerException(BrokerErrorCode.EMAIL_OR_PASSWORD_INCORRECT, BrokerErrorCode.EMAIL_OR_PASSWORD_INCORRECT.getKey());
         }
 
+        SendEventDTO sendEventDTO = new SendEventDTO();
+        sendEventDTO.setUserId(1L);
+        sendEventDTO.setDescription("Successfully logged in");
+
+        operationsServiceClient.sendEvent(sendEventDTO);
+
         GetTokenDTO getTokenDTO = new GetTokenDTO();
         getTokenDTO.setUsername(loginDTO.getEmail());
-        getTokenDTO.setRole("PRUEBA");
+        getTokenDTO.setRole(user.getRoleType().getRoleName());
 
         return securityServiceClient.getToken(getTokenDTO);
     }
