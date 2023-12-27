@@ -1,6 +1,5 @@
 package com.btb.usersorganizationservice.entity;
 
-import io.swagger.v3.oas.annotations.info.Contact;
 import lombok.*;
 
 import java.util.Date;

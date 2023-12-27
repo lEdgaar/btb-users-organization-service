@@ -1,9 +1,8 @@
 package com.btb.usersorganizationservice.controller;
 
 import com.btb.usersorganizationservice.dto.AddBrokerDTO;
-import com.btb.usersorganizationservice.dto.AddChatDTO;
+import com.btb.usersorganizationservice.dto.AddNotificationDTO;
 import com.btb.usersorganizationservice.dto.UpdateBrokerDTO;
-import com.btb.usersorganizationservice.entity.Chat;
 import com.btb.usersorganizationservice.entity.User;
 import com.btb.usersorganizationservice.exception.BrokerException;
 import com.btb.usersorganizationservice.exception.DBException;
@@ -61,7 +60,7 @@ public class BrokerController {
     }
 
     @GetMapping("/search")
-    public @ResponseBody List<User> searchBrokerByNameOrEmail(@RequestParam String name) throws BrokerException {
+    public @ResponseBody List<User> searchBrokerByNameOrEmail(@RequestParam("name") String name) throws BrokerException {
         log.info("GET /brokers?name={}", name);
 
         log.info("Event: Search broker by name: {}", name);
@@ -75,5 +74,13 @@ public class BrokerController {
         log.info("Event: Search broker by id: {}", brokerId);
         return brokerService.getBrokerById(brokerId);
     }
+
+    /*@PostMapping("/{brokerId}/notifications")
+    public void addNotification(@PathVariable("brokerId") Long brokerId, @RequestBody AddNotificationDTO addNotificationDTO) throws BrokerException {
+        log.info("POST /brokers/{}/notifications", brokerId);
+
+        log.info("Event: Add notification to broker: {}", brokerId);
+        brokerService.addNotification(brokerId, addChatDTO);
+    }*/
 
 }
