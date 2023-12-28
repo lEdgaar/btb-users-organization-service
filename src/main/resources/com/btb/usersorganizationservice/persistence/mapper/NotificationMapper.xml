@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.btb.usersorganizationservice.persistence.mapper.NotificationMapper">
+
+    <resultMap id="resultMap" type="com.btb.usersorganizationservice.entity.Notification">
+
+        <id property="id" column="ID" javaType="Long" jdbcType="BIGINT" />
+
+        <result property="action" column="ACTION" javaType="String" jdbcType="VARCHAR" />
+
+        <result property="viaMail" column="VIA_MAIL" javaType="boolean" jdbcType="BOOLEAN" />
+
+        <result property="isAlert" column="IS_ALERT" javaType="boolean" jdbcType="BOOLEAN" />
+
+        <result property="isActive" column="IS_ACTIVE" javaType="boolean" jdbcType="BOOLEAN" />
+
+        <result property="createdAt" column="CREATE_AT" javaType="Date" jdbcType="TIMESTAMP" />
+
+        <result property="endTimeAt" column="END_TIME_AT" javaType="Date" jdbcType="TIMESTAMP" />
+
+        <association property="user" column="USER_ID" javaType="com.btb.usersorganizationservice.entity.User"
+                     fetchType="lazy" select="com.btb.usersorganizationservice.persistence.mapper.UserMapper.findById"/>
+
+    </resultMap>
+
+    <sql id="selectColumnNamesClause">
+        RES.ID,
+        RES.ACTION,
+        RES.VIA_MAIL,
+        RES.IS_ALERT,
+        RES.IS_ACTIVE,
+        RES.CREATE_AT,
+        RES.END_TIME_AT,
+        RES.USER_ID
+    </sql>
+
+    <sql id="whereFilteredClause">
+        <if test="id != null">
+            AND RES.ID=#{id}
+        </if>
+        <if test="action != null">
+            AND RES.ACTION=#{action}
+        </if>
+        <if test="viaMail != null">
+            AND RES.VIA_MAIL=#{viaMail}
+        </if>
+        <if test="isAlert != null">
+            AND RES.IS_ALERT=#{isAlert}
+        </if>
+        <if test="isActive != null">
+            AND RES.IS_ACTIVE=#{isActive}
+        </if>
+        <if test="createdAt != null">
+            AND RES.CREATE_AT=#{createdAt}
+        </if>
+        <if test="endTimeAt != null">
+            AND RES.END_TIME_AT=#{endTimeAt}
+        </if>
+        <if test="user != null and user.id != null">
+            AND RES.USER_ID=#{user.id}
+        </if>
+    </sql>
+
+    <sql id="insertColumnNamesClause">
+        ACTION,
+        VIA_MAIL,
+        IS_ALERT,
+        IS_ACTIVE,
+        CREATE_AT,
+        END_TIME_AT,
+        USER_ID
+    </sql>
+
+    <sql id="insertValuesClause">
+        #{action},
+        #{viaMail},
+        #{isAlert},
+        #{isActive},
+        #{createdAt},
+        #{endTimeAt},
+        #{user.id}
+    </sql>
+
+    <sql id="updateSetClause">
+        ACTION=#{action},
+        VIA_MAIL=#{viaMail},
+        IS_ALERT=#{isAlert},
+        IS_ACTIVE=#{isActive},
+        CREATE_AT=#{createdAt},
+        END_TIME_AT=#{endTimeAt},
+        USER_ID=#{user.id}
+    </sql>
+
+    <select id="findById" resultMap="resultMap" parameterType="Long">
+        select
+        <include refid="selectColumnNamesClause" />
+        from
+        NOTIFICATIONS
+        RES
+        where
+        RES.ID=#{value}
+    </select>
+
+    <select id="findAll" resultMap="resultMap">
+        select
+        <include refid="selectColumnNamesClause" />
+        from
+        NOTIFICATIONS
+        RES
+        order by
+        RES.ID asc
+    </select>
+
+    <select id="findByFilter" resultMap="resultMap" parameterType="com.btb.usersorganizationservice.entity.Notification">
+        select
+        <include refid="selectColumnNamesClause" />
+        from
+        NOTIFICATIONS
+        RES
+        where 1=1
+        <include refid="whereFilteredClause" />
+        order by
+        RES.ID asc
+    </select>
+
+    <insert id="save" parameterType="com.btb.usersorganizationservice.entity.Notification" useGeneratedKeys="true" keyColumn="ID" keyProperty="id">
+        insert into
+        NOTIFICATIONS
+        (
+        <include refid="insertColumnNamesClause" />
+        )
+        values
+        (
+        <include refid="insertValuesClause" />
+        )
+    </insert>
+
+    <update id="update" parameterType="com.btb.usersorganizationservice.entity.Notification">
+        update
+        NOTIFICATIONS
+        set
+        <include refid="updateSetClause" />
+        where
+        ID=#{id}
+    </update>
+
+    <delete id="delete" parameterType="Long">
+        delete from
+            NOTIFICATIONS
+        where
+            ID=#{value}
+    </delete>
+
+</mapper>

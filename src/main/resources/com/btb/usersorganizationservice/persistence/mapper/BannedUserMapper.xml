@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.btb.usersorganizationservice.persistence.mapper.BannedUserMapper">
+
+    <sql id="tableName">BANNED_USERS</sql>
+
+    <resultMap id="resultMap" type="com.btb.usersorganizationservice.entity.BannedUser">
+
+        <id property="id" column="ID" javaType="Long" jdbcType="BIGINT" />
+
+        <result property="startDate" column="START_DATE" javaType="Date" jdbcType="TIMESTAMP" />
+
+        <result property="endDate" column="END_DATE" javaType="Date" jdbcType="TIMESTAMP" />
+
+        <result property="isFinished" column="IS_FINISHED" javaType="boolean" jdbcType="BOOLEAN" />
+
+        <association property="user" column="USER_ID" javaType="com.btb.usersorganizationservice.entity.User"
+                     fetchType="lazy" select="com.btb.usersorganizationservice.persistence.mapper.UserMapper.findById"/>
+
+        <association property="banReason" column="BAN_REASON_ID" javaType="com.btb.usersorganizationservice.entity.BanReason"
+                     fetchType="lazy" select="com.btb.usersorganizationservice.persistence.mapper.BanReasonMapper.findById"/>
+
+    </resultMap>
+
+    <sql id="selectColumnNamesClause">
+        RES.ID,
+        RES.USER_ID,
+        RES.BAN_REASON_ID,
+        RES.START_DATE,
+        RES.END_DATE,
+        RES.IS_FINISHED
+    </sql>
+
+    <sql id="whereFilteredClause">
+        <if test="id != null">
+            AND RES.ID=#{id}
+        </if>
+        <if test="user != null and user.id != null">
+            AND RES.USER_ID=#{user.id}
+        </if>
+        <if test="banReason != null and banReason.id != null">
+            AND RES.BAN_REASON_ID=#{banReason.id}
+        </if>
+        <if test="startDate != null">
+            AND RES.START_DATE=#{startDate}
+        </if>
+        <if test="endDate != null">
+            AND RES.END_DATE=#{endDate}
+        </if>
+        <if test="isFinished != null">
+            AND RES.IS_FINISHED=#{isFinished}
+        </if>
+    </sql>
+
+    <sql id="insertColumnNamesClause">
+        USER_ID,
+        BAN_REASON_ID,
+        START_DATE,
+        END_DATE,
+        IS_FINISHED
+    </sql>
+
+    <sql id="insertValuesClause">
+        #{user.id},
+        #{banReason.id},
+        #{startDate},
+        #{endDate},
+        #{isFinished}
+    </sql>
+
+    <sql id="updateSetClause">
+        USER_ID=#{user.id},
+        BAN_REASON_ID=#{banReason.id},
+        START_DATE=#{startDate},
+        END_DATE=#{endDate},
+        IS_FINISHED=#{isFinished}
+    </sql>
+
+    <select id="findById" resultMap="resultMap" parameterType="Long">
+        select
+        <include refid="selectColumnNamesClause" />
+        from
+        <include refid="tableName" />
+        RES
+        where
+        RES.ID=#{value}
+    </select>
+
+    <select id="findAll" resultMap="resultMap">
+        select
+        <include refid="selectColumnNamesClause" />
+        from
+        <include refid="tableName" />
+        RES
+        order by
+        RES.ID asc
+    </select>
+
+    <select id="findByFilter" resultMap="resultMap" parameterType="com.btb.usersorganizationservice.entity.BannedUser">
+        select
+        <include refid="selectColumnNamesClause" />
+        from
+        <include refid="tableName" />
+        RES
+        where 1=1
+        <include refid="whereFilteredClause" />
+        order by
+        RES.ID asc
+    </select>
+
+    <insert id="save" parameterType="com.btb.usersorganizationservice.entity.BannedUser" useGeneratedKeys="true" keyColumn="ID" keyProperty="id">
+        insert into
+        <include refid="tableName" />
+        (
+        <include refid="insertColumnNamesClause" />
+        )
+        values
+        (
+        <include refid="insertValuesClause" />
+        )
+    </insert>
+
+    <update id="update" parameterType="com.btb.usersorganizationservice.entity.BannedUser">
+        update
+        <include refid="tableName" />
+        set
+        <include refid="updateSetClause" />
+        where
+        ID=#{id}
+    </update>
+
+    <delete id="delete" parameterType="Long">
+        delete from
+        <include refid="tableName" />
+        where
+        ID=#{value}
+    </delete>
+
+</mapper>

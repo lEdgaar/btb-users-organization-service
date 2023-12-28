@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.btb.usersorganizationservice.persistence.mapper.BanReasonMapper">
+
+    <cache/>
+
+    <sql id="tableName">BAN_REASONS</sql>
+
+    <resultMap id="resultMap" type="com.btb.usersorganizationservice.entity.BanReason">
+
+        <id property="id" column="ID" javaType="Long" jdbcType="BIGINT" />
+
+        <result property="reason" column="REASON" javaType="String" jdbcType="VARCHAR" />
+
+        <result property="isVisible" column="IS_VISIBLE" javaType="boolean" jdbcType="BOOLEAN" />
+
+    </resultMap>
+
+    <sql id="selectColumnNamesClause">
+        RES.ID,
+        RES.REASON,
+        RES.IS_VISIBLE
+    </sql>
+
+    <sql id="whereFilteredClause">
+        <if test="id != null">
+            AND RES.ID=#{id}
+        </if>
+        <if test="reason != null">
+            AND RES.REASON=#{reason}
+        </if>
+        <if test="isVisible != null">
+            AND RES.IS_VISIBLE=#{isVisible}
+        </if>
+    </sql>
+
+    <sql id="insertColumnNamesClause">
+        REASON,
+        IS_VISIBLE
+    </sql>
+
+    <sql id="insertValuesClause">
+        #{reason},
+        #{isVisible}
+    </sql>
+
+    <sql id="updateSetClause">
+        REASON=#{reason},
+        IS_VISIBLE=#{isVisible}
+    </sql>
+
+    <select id="findById" resultMap="resultMap" parameterType="Long" useCache="true" flushCache="false">
+        select
+        <include refid="selectColumnNamesClause" />
+        from
+        <include refid="tableName" />
+        RES
+        where
+        RES.ID=#{value}
+    </select>
+
+    <select id="findAll" resultMap="resultMap">
+        select
+        <include refid="selectColumnNamesClause" />
+        from
+        <include refid="tableName" />
+        RES
+        order by
+        RES.ID asc
+    </select>
+
+    <select id="findByFilter" resultMap="resultMap" parameterType="com.btb.usersorganizationservice.entity.BanReason">
+        select
+        <include refid="selectColumnNamesClause" />
+        from
+        <include refid="tableName" />
+        RES
+        where 1=1
+        <include refid="whereFilteredClause" />
+        order by
+        RES.ID asc
+    </select>
+
+    <insert id="save" parameterType="com.btb.usersorganizationservice.entity.BanReason" useGeneratedKeys="true" keyColumn="ID" keyProperty="id" flushCache="true">
+        insert into
+        <include refid="tableName" />
+        (
+        <include refid="insertColumnNamesClause" />
+        )
+        values
+        (
+        <include refid="insertValuesClause" />
+        )
+    </insert>
+
+    <update id="update" parameterType="com.btb.usersorganizationservice.entity.BanReason" flushCache="true">
+        update
+        <include refid="tableName" />
+        set
+        <include refid="updateSetClause" />
+        where
+        ID=#{id}
+    </update>
+
+    <delete id="delete" parameterType="Long" flushCache="true">
+        delete from
+        <include refid="tableName" />
+        where
+        ID=#{value}
+    </delete>
+
+</mapper>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.btb.usersorganizationservice.persistence.mapper.OrganizationRestrictionMapper">
+
+    <resultMap id="resultMap" type="com.btb.usersorganizationservice.entity.OrganizationRestriction">
+
+        <id property="id" column="ID" javaType="Long" jdbcType="BIGINT" />
+
+        <result property="limitPositions" column="LIMIT_POSITIONS" javaType="Double" jdbcType="DOUBLE" />
+
+        <result property="globalLimitPositions" column="GLOBAL_LIMIT_POSITIONS" javaType="Double" jdbcType="DOUBLE" />
+
+        <result property="riskLimit" column="RISK_LIMIT" javaType="Long" jdbcType="BIGINT" />
+
+        <result property="shareInformation" column="SHARE_INFORMATION" javaType="boolean" jdbcType="BOOLEAN" />
+
+        <association property="organization" column="ORGANIZATION_ID" javaType="com.btb.usersorganizationservice.entity.Organization"
+                     fetchType="lazy" select="com.btb.usersorganizationservice.persistence.mapper.OrganizationMapper.findById"/>
+
+
+    </resultMap>
+
+    <sql id="selectColumnNamesClause">
+        RES.ID,
+        RES.ORGANIZATION_ID,
+        RES.LIMIT_POSITIONS,
+        RES.GLOBAL_LIMIT_POSITIONS,
+        RES.RISK_LIMIT,
+        RES.SHARE_INFORMATION
+    </sql>
+
+    <sql id="whereFilteredClause">
+        <if test="id != null">
+            AND RES.ID=#{id}
+        </if>
+        <if test="organization != null and organization.id != null">
+            AND RES.ORGANIZATION_ID=#{organization.id}
+        </if>
+        <if test="limitPositions != null">
+            AND RES.LIMIT_POSITIONS=#{limitPositions}
+        </if>
+        <if test="globalLimitPositions != null">
+            AND RES.GLOBAL_LIMIT_POSITIONS=#{globalLimitPositions}
+        </if>
+        <if test="riskLimit != null">
+            AND RES.RISK_LIMIT=#{riskLimit}
+        </if>
+        <if test="shareInformation != null">
+            AND RES.SHARE_INFORMATION=#{shareInformation}
+        </if>
+    </sql>
+
+    <sql id="insertColumnNamesClause">
+        ORGANIZATION_ID,
+        LIMIT_POSITIONS,
+        GLOBAL_LIMIT_POSITIONS,
+        RISK_LIMIT,
+        SHARE_INFORMATION
+    </sql>
+
+    <sql id="insertValuesClause">
+        #{organization.id},
+        #{limitPositions},
+        #{globalLimitPositions},
+        #{riskLimit},
+        #{shareInformation}
+    </sql>
+
+    <sql id="updateSetClause">
+        ORGANIZATION_ID=#{organization.id},
+        LIMIT_POSITIONS=#{limitPositions},
+        GLOBAL_LIMIT_POSITIONS=#{globalLimitPositions},
+        RISK_LIMIT=#{riskLimit},
+        SHARE_INFORMATION=#{shareInformation}
+    </sql>
+
+    <select id="findById" resultMap="resultMap" parameterType="Long">
+        select
+        <include refid="selectColumnNamesClause" />
+        from
+        ORGANIZATION_RESTRICTION
+        RES
+        where
+        RES.ID=#{value}
+    </select>
+
+    <select id="findAll" resultMap="resultMap">
+        select
+        <include refid="selectColumnNamesClause" />
+        from
+        ORGANIZATION_RESTRICTION
+        RES
+        order by
+        RES.ID asc
+    </select>
+
+    <select id="findByFilter" resultMap="resultMap" parameterType="com.btb.usersorganizationservice.entity.OrganizationRestriction">
+        select
+        <include refid="selectColumnNamesClause" />
+        from
+        ORGANIZATION_RESTRICTION
+        RES
+        where 1=1
+        <include refid="whereFilteredClause" />
+        order by
+        RES.ID asc
+    </select>
+
+    <insert id="save" parameterType="com.btb.usersorganizationservice.entity.OrganizationRestriction" useGeneratedKeys="true" keyColumn="ID" keyProperty="id">
+        insert into
+        ORGANIZATION_RESTRICTION
+        (
+        <include refid="insertColumnNamesClause" />
+        )
+        values
+        (
+        <include refid="insertValuesClause" />
+        )
+    </insert>
+
+    <update id="update" parameterType="com.btb.usersorganizationservice.entity.OrganizationRestriction" >
+        update
+        ORGANIZATION_RESTRICTION
+        set
+        <include refid="updateSetClause" />
+        where
+        ID=#{id}
+    </update>
+
+    <delete id="delete" parameterType="Long">
+        delete from
+            ORGANIZATION_RESTRICTION
+        where
+            ID=#{value}
+    </delete>
+
+</mapper>

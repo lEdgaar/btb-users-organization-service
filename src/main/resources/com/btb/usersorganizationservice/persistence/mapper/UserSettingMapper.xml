@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.btb.usersorganizationservice.persistence.mapper.UserSettingMapper">
+
+    <resultMap id="resultMap" type="com.btb.usersorganizationservice.entity.UserSetting">
+
+        <id property="id" column="ID" javaType="Long" jdbcType="BIGINT" />
+
+        <result property="sendNotifications" column="SEND_NOTIFICATIONS" javaType="boolean" jdbcType="BOOLEAN" />
+
+        <result property="sendEmails" column="SEND_EMAILS" javaType="boolean" jdbcType="BOOLEAN" />
+
+        <result property="sendGroupRequest" column="SEND_GROUP_REQUEST" javaType="boolean" jdbcType="BOOLEAN" />
+
+        <result property="showBriefcase" column="SHOW_BRIEFCASE" javaType="boolean" jdbcType="BOOLEAN" />
+
+        <result property="showAssets" column="SHOW_ASSETS" javaType="boolean" jdbcType="BOOLEAN" />
+
+        <result property="showActives" column="SHOW_ACTIVES" javaType="boolean" jdbcType="BOOLEAN" />
+
+        <association property="user" column="USER_ID" javaType="com.btb.usersorganizationservice.entity.User"
+                     fetchType="lazy" select="com.btb.usersorganizationservice.persistence.mapper.UserMapper.findById"/>
+
+    </resultMap>
+
+    <sql id="selectColumnNamesClause">
+        RES.ID,
+        RES.SEND_NOTIFICATIONS,
+        RES.SEND_EMAILS,
+        RES.SEND_GROUP_REQUEST,
+        RES.SHOW_BRIEFCASE,
+        RES.SHOW_ASSETS,
+        RES.SHOW_ACTIVES,
+        RES.USER_ID
+    </sql>
+
+    <sql id="whereFilteredClause">
+        <if test="id != null">
+            AND RES.ID=#{id}
+        </if>
+        <if test="sendNotifications != null">
+            AND RES.SEND_NOTIFICATIONS=#{sendNotifications}
+        </if>
+        <if test="sendEmails != null">
+            AND RES.SEND_EMAILS=#{sendEmails}
+        </if>
+        <if test="sendGroupRequest != null">
+            AND RES.SEND_GROUP_REQUEST=#{sendGroupRequest}
+        </if>
+        <if test="showBriefcase != null">
+            AND RES.SHOW_BRIEFCASE=#{showBriefcase}
+        </if>
+        <if test="showAssets != null">
+            AND RES.SHOW_ASSETS=#{showAssets}
+        </if>
+        <if test="showActives != null">
+            AND RES.SHOW_ACTIVES=#{showActives}
+        </if>
+        <if test="user != null and user.id != null">
+            AND RES.USER_ID=#{user.id}
+        </if>
+    </sql>
+
+    <sql id="insertColumnNamesClause">
+        SEND_NOTIFICATIONS,
+        SEND_EMAILS,
+        SEND_GROUP_REQUEST,
+        SHOW_BRIEFCASE,
+        SHOW_ASSETS,
+        SHOW_ACTIVES,
+        USER_ID
+    </sql>
+
+    <sql id="insertValuesClause">
+        #{sendNotifications},
+        #{sendEmails},
+        #{sendGroupRequest},
+        #{showBriefcase},
+        #{showAssets},
+        #{showActives},
+        #{user.id}
+    </sql>
+
+    <sql id="updateSetClause">
+        SEND_NOTIFICATIONS=#{sendNotifications},
+        SEND_EMAILS=#{sendEmails},
+        SEND_GROUP_REQUEST=#{sendGroupRequest},
+        SHOW_BRIEFCASE=#{showBriefcase},
+        SHOW_ASSETS=#{showAssets},
+        SHOW_ACTIVES=#{showActives},
+        USER_ID=#{user.id}
+    </sql>
+
+    <select id="findById" resultMap="resultMap" parameterType="Long">
+        select
+        <include refid="selectColumnNamesClause" />
+        from
+        USER_SETTINGS
+        RES
+        where
+        RES.ID=#{value}
+    </select>
+
+    <select id="findAll" resultMap="resultMap">
+        select
+        <include refid="selectColumnNamesClause" />
+        from
+        USER_SETTINGS
+        RES
+        order by
+        RES.ID asc
+    </select>
+
+    <select id="findByFilter" resultMap="resultMap" parameterType="com.btb.usersorganizationservice.entity.UserSetting">
+        select
+        <include refid="selectColumnNamesClause" />
+        from
+        USER_SETTINGS
+        RES
+        where 1=1
+        <include refid="whereFilteredClause" />
+        order by
+        RES.ID asc
+    </select>
+
+    <insert id="save" parameterType="com.btb.usersorganizationservice.entity.UserSetting" useGeneratedKeys="true" keyColumn="ID" keyProperty="id">
+        insert into
+        USER_SETTINGS
+        (
+        <include refid="insertColumnNamesClause" />
+        )
+        values
+        (
+        <include refid="insertValuesClause" />
+        )
+    </insert>
+
+    <update id="update" parameterType="com.btb.usersorganizationservice.entity.UserSetting">
+        update
+        USER_SETTINGS
+        set
+        <include refid="updateSetClause" />
+        where
+        ID=#{id}
+    </update>
+
+    <delete id="delete" parameterType="Long">
+        delete from
+            USER_SETTINGS
+        where
+            ID=#{value}
+    </delete>
+
+</mapper>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.btb.usersorganizationservice.persistence.mapper.ChatMapper">
+
+    <resultMap id="resultMap" type="com.btb.usersorganizationservice.entity.Chat">
+
+        <id property="id" column="ID" javaType="Long" jdbcType="BIGINT" />
+
+        <result property="message" column="MESSAGE" javaType="String" jdbcType="VARCHAR" />
+
+        <result property="createdAt" column="CREATED_AT" javaType="Date" jdbcType="TIMESTAMP" />
+
+        <association property="userSendedId" column="USER_SENDED_ID" javaType="com.btb.usersorganizationservice.entity.User"
+                     fetchType="lazy" select="com.btb.usersorganizationservice.persistence.mapper.UserMapper.findById"/>
+
+        <association property="userRecivedId" column="USER_RECIVED_ID" javaType="com.btb.usersorganizationservice.entity.User"
+                     fetchType="lazy" select="com.btb.usersorganizationservice.persistence.mapper.UserMapper.findById"/>
+
+    </resultMap>
+
+    <sql id="selectColumnNamesClause">
+        RES.ID,
+        RES.USER_SENDED_ID,
+        RES.USER_RECIVED_ID,
+        RES.MESSAGE,
+        RES.CREATED_AT
+    </sql>
+
+    <sql id="whereFilteredClause">
+        <if test="id != null">
+            AND RES.ID=#{id}
+        </if>
+        <if test="userSendedId != null and userSendedId.id != null">
+            AND RES.USER_SENDED_ID=#{userSendedId.id}
+        </if>
+        <if test="userRecivedId != null and userRecivedId.id != null">
+            AND RES.USER_RECIVED_ID=#{userRecivedId.id}
+        </if>
+        <if test="message != null">
+            AND RES.MESSAGE=#{message}
+        </if>
+        <if test="createdAt != null">
+            AND RES.CREATED_AT=#{createdAt}
+        </if>
+    </sql>
+
+    <sql id="insertColumnNamesClause">
+        USER_SENDED_ID,
+        USER_RECIVED_ID,
+        MESSAGE,
+        CREATED_AT
+    </sql>
+
+    <sql id="insertValuesClause">
+        #{userSendedId.id},
+        #{userRecivedId.id},
+        #{message},
+        #{createdAt}
+    </sql>
+
+    <sql id="updateSetClause">
+        USER_SENDED_ID=#{userSendedId.id},
+        USER_RECIVED_ID=#{userRecivedId.id},
+        MESSAGE=#{message},
+        CREATED_AT=#{createdAt}
+    </sql>
+
+    <select id="findById" resultMap="resultMap" parameterType="Long">
+        select
+        <include refid="selectColumnNamesClause" />
+        from
+        CHATS
+        RES
+        where
+        RES.ID=#{value}
+    </select>
+
+    <select id="findAll" resultMap="resultMap">
+        select
+        <include refid="selectColumnNamesClause" />
+        from
+        CHATS
+        RES
+        order by
+        RES.ID asc
+    </select>
+
+    <select id="findByFilter" resultMap="resultMap" parameterType="com.btb.usersorganizationservice.entity.Chat">
+        select
+        <include refid="selectColumnNamesClause" />
+        from
+        CHATS
+        RES
+        where 1=1
+        <include refid="whereFilteredClause" />
+        order by
+        RES.ID asc
+    </select>
+
+    <insert id="save" parameterType="com.btb.usersorganizationservice.entity.Chat" useGeneratedKeys="true" keyColumn="ID" keyProperty="id">
+        insert into
+        CHATS
+        (
+        <include refid="insertColumnNamesClause" />
+        )
+        values
+        (
+        <include refid="insertValuesClause" />
+        )
+    </insert>
+
+    <update id="update" parameterType="com.btb.usersorganizationservice.entity.Chat">
+        update
+        CHATS
+        set
+        <include refid="updateSetClause" />
+        where
+        ID=#{id}
+    </update>
+
+    <delete id="delete" parameterType="Long">
+        delete from
+            CHATS
+        where
+            ID=#{value}
+    </delete>
+
+</mapper>
