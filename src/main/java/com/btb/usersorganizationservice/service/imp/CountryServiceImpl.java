@@ -15,12 +15,7 @@ public class CountryServiceImpl implements CountryService {
 
     @Override
     public Country getCountryByCountryCode(String countryCode) {
-        Country country = countryMapper.findByCountryCode(countryCode);
 
-        if (country == null) {
-            // ERROR
-        }
-
-        return country;
+        return countryMapper.findByCountryCode(countryCode);
     }
 }

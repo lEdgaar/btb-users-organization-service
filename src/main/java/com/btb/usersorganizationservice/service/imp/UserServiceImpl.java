@@ -4,6 +4,7 @@ import com.btb.usersorganizationservice.client.OperationsServiceClient;
 import com.btb.usersorganizationservice.client.SecurityServiceClient;
 import com.btb.usersorganizationservice.dto.LoginDTO;
 import com.btb.usersorganizationservice.dto.request.GetTokenDTO;
+import com.btb.usersorganizationservice.dto.request.SendEventDTO;
 import com.btb.usersorganizationservice.entity.User;
 import com.btb.usersorganizationservice.exception.BrokerErrorCode;
 import com.btb.usersorganizationservice.exception.BrokerException;
@@ -40,11 +41,11 @@ public class UserServiceImpl implements UserService {
             throw new BrokerException(BrokerErrorCode.EMAIL_OR_PASSWORD_INCORRECT, BrokerErrorCode.EMAIL_OR_PASSWORD_INCORRECT.getKey());
         }
 
-        /*SendEventDTO sendEventDTO = new SendEventDTO();
+        SendEventDTO sendEventDTO = new SendEventDTO();
         sendEventDTO.setUserId(1L);
         sendEventDTO.setDescription("Successfully logged in");
 
-        operationsServiceClient.sendEvent(sendEventDTO);*/
+        operationsServiceClient.sendEvent(sendEventDTO);
 
         GetTokenDTO getTokenDTO = new GetTokenDTO();
         getTokenDTO.setEmail(loginDTO.getEmail());
@@ -54,8 +55,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String logout(String token) {
-        return null;
+    public void logout(String token) {
+        log.info("Logout");
+
+        SendEventDTO sendEventDTO = new SendEventDTO();
+        sendEventDTO.setUserId(1L);
+        sendEventDTO.setDescription("Successfully logged out");
+
+        operationsServiceClient.sendEvent(sendEventDTO);
     }
 
 

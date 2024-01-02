@@ -7,6 +7,6 @@ public interface UserService {
 
     String login(LoginDTO loginDTO) throws BrokerException;
 
-    String logout(String token);
+    void logout(String token);
 
 }

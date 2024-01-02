@@ -1,6 +1,8 @@
 package com.btb.usersorganizationservice.service.imp;
 
+import com.btb.usersorganizationservice.client.OperationsServiceClient;
 import com.btb.usersorganizationservice.dto.BanUserDTO;
+import com.btb.usersorganizationservice.dto.request.SendEventDTO;
 import com.btb.usersorganizationservice.entity.BannedUser;
 import com.btb.usersorganizationservice.entity.User;
 import com.btb.usersorganizationservice.exception.BrokerException;
@@ -33,6 +35,9 @@ public class AdministrationServiceImpl implements AdministrationService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private OperationsServiceClient operationsServiceClient;
+
     @Override
     public void banUser(BanUserDTO banUserDTO) throws BrokerException, DBException {
         log.trace("Ban user: {}", banUserDTO.getUserId());
@@ -57,6 +62,12 @@ public class AdministrationServiceImpl implements AdministrationService {
         }
 
         log.trace("User: {} banned", banUserDTO.getUserId());
+
+        SendEventDTO sendEventDTO = new SendEventDTO();
+        sendEventDTO.setUserId(1L);
+        sendEventDTO.setDescription("User banned");
+
+        operationsServiceClient.sendEvent(sendEventDTO);
     }
 
     @Override
