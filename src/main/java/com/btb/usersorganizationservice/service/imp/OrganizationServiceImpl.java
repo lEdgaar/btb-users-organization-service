@@ -1,12 +1,11 @@
 package com.btb.usersorganizationservice.service.imp;
 
+import com.btb.usersorganizationservice.dto.AddBrokerDTO;
 import com.btb.usersorganizationservice.dto.AddOrganizationDTO;
 import com.btb.usersorganizationservice.entity.Organization;
 import com.btb.usersorganizationservice.entity.User;
-import com.btb.usersorganizationservice.exception.BrokerException;
-import com.btb.usersorganizationservice.exception.DBException;
-import com.btb.usersorganizationservice.exception.OrganizationErrorCode;
-import com.btb.usersorganizationservice.exception.OrganizationException;
+import com.btb.usersorganizationservice.exception.*;
+import com.btb.usersorganizationservice.md.RoleTypeMD;
 import com.btb.usersorganizationservice.persistence.mapper.OrganizationMapper;
 import com.btb.usersorganizationservice.service.BrokerService;
 import com.btb.usersorganizationservice.service.OrganizationService;
@@ -35,8 +34,19 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    public void addOrganization(AddOrganizationDTO addOrganizationDTO) throws DBException {
+    public void addOrganization(AddOrganizationDTO addOrganizationDTO) throws DBException, BrokerException, RoleTypeException {
         log.info("Adding organization: {}", addOrganizationDTO.getName());
+
+        AddBrokerDTO addBrokerDTO = new AddBrokerDTO();
+        addBrokerDTO.setRoleTypeId(RoleTypeMD.USER.getInternalCode());
+        addBrokerDTO.setEmail(addOrganizationDTO.getEmail());
+        addBrokerDTO.setPassword(addOrganizationDTO.getPassword());
+        addBrokerDTO.setFirstName(addOrganizationDTO.getName());
+        addBrokerDTO.setSurname(addOrganizationDTO.getName());
+        addBrokerDTO.setCountryCode("ES");
+        addBrokerDTO.setDateOfBirth(new Date());
+
+        brokerService.addBroker(addBrokerDTO);
 
         Organization organization = new Organization();
         organization.setOrganizationName(addOrganizationDTO.getName());
@@ -47,6 +57,8 @@ public class OrganizationServiceImpl implements OrganizationService {
         if (organizationMapper.save(organization) != 1) {
             throw new DBException("Error adding organization");
         }
+
+        brokerService.setBrokerToOrganization(brokerService.getBrokerLikeNameOrEmail(addOrganizationDTO.getEmail()).getUserId(), organization);
 
         log.info("Organization: {} added", addOrganizationDTO.getName());
     }

@@ -45,4 +45,6 @@ public class AddBrokerDTO {
     @NotNullOrEmpty
     private String countryCode;
 
+    private String roleTypeId;
+
 }

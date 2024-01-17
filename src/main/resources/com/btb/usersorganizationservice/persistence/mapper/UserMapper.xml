@@ -176,20 +176,6 @@
         RES.ID=#{value}
     </select>
 
-    <select id="findByName" resultMap="resultMap" parameterType="String">
-        <bind name="pattern" value="'%' + _parameter.getTitle() + '%'" />
-        select
-        <include refid="selectColumnNamesClause" />
-        from
-        <include refid="tableName" />
-        RES
-        where RES.IS_DELETED=false
-        <if test="value != null">
-            <bind name="pattern" value="'%' + value + '%'" />
-            AND RES.USERNAME LIKE #{pattern}
-        </if>
-    </select>
-
     <select id="findAll" resultMap="resultMap">
         select
         <include refid="selectColumnNamesClause" />

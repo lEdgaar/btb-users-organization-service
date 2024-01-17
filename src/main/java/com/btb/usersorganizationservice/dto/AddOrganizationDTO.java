@@ -17,4 +17,8 @@ public class AddOrganizationDTO {
 
     private String urlPicture;
 
+    private String email;
+
+    private String password;
+
 }

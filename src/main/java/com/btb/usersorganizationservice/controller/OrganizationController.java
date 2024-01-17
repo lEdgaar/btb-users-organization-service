@@ -5,6 +5,7 @@ import com.btb.usersorganizationservice.entity.Organization;
 import com.btb.usersorganizationservice.exception.BrokerException;
 import com.btb.usersorganizationservice.exception.DBException;
 import com.btb.usersorganizationservice.exception.OrganizationException;
+import com.btb.usersorganizationservice.exception.RoleTypeException;
 import com.btb.usersorganizationservice.service.OrganizationService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ public class OrganizationController {
     }
 
     @PostMapping("/")
-    public void addOrganization(@RequestBody AddOrganizationDTO addOrganizationDTO) throws DBException {
+    public void addOrganization(@RequestBody AddOrganizationDTO addOrganizationDTO) throws DBException, BrokerException, RoleTypeException {
         log.trace("POST /organizations {}", addOrganizationDTO.getName());
 
         log.info("Event: Add organization: {}", addOrganizationDTO.getName());

@@ -3,6 +3,7 @@ package com.btb.usersorganizationservice.service.imp;
 import com.btb.usersorganizationservice.client.OperationsServiceClient;
 import com.btb.usersorganizationservice.client.SecurityServiceClient;
 import com.btb.usersorganizationservice.dto.LoginDTO;
+import com.btb.usersorganizationservice.dto.TokenDTO;
 import com.btb.usersorganizationservice.dto.request.GetTokenDTO;
 import com.btb.usersorganizationservice.dto.request.SendEventDTO;
 import com.btb.usersorganizationservice.entity.User;
@@ -32,7 +33,7 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public String login(LoginDTO loginDTO) throws BrokerException {
+    public TokenDTO login(LoginDTO loginDTO) throws BrokerException {
         log.info("Login: {}", loginDTO.getEmail());
 
         User user = brokerService.findUserByEmail(loginDTO.getEmail());
@@ -42,28 +43,21 @@ public class UserServiceImpl implements UserService {
         }
 
         SendEventDTO sendEventDTO = new SendEventDTO();
-        sendEventDTO.setUserId(1L);
+        sendEventDTO.setUserId(user.getId());
         sendEventDTO.setDescription("Successfully logged in");
 
         operationsServiceClient.sendEvent(sendEventDTO);
 
-        GetTokenDTO getTokenDTO = new GetTokenDTO();
+        GetTokenDTO getTokenDTO  = new GetTokenDTO();
         getTokenDTO.setEmail(loginDTO.getEmail());
         getTokenDTO.setRole(user.getRoleType().getRoleName());
 
-        return securityServiceClient.getToken(getTokenDTO);
+        TokenDTO tokenDTO = new TokenDTO();
+        tokenDTO.setToken(securityServiceClient.getToken(getTokenDTO));
+        tokenDTO.setUserId(user.getId());
+        tokenDTO.setRole(user.getRoleType().getRoleName());
+
+        return tokenDTO;
     }
-
-    @Override
-    public void logout(String token) {
-        log.info("Logout");
-
-        SendEventDTO sendEventDTO = new SendEventDTO();
-        sendEventDTO.setUserId(1L);
-        sendEventDTO.setDescription("Successfully logged out");
-
-        operationsServiceClient.sendEvent(sendEventDTO);
-    }
-
 
 }

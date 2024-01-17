@@ -3,6 +3,7 @@ package com.btb.usersorganizationservice.service;
 import com.btb.usersorganizationservice.dto.AddBrokerDTO;
 import com.btb.usersorganizationservice.dto.AddChatDTO;
 import com.btb.usersorganizationservice.dto.UpdateBrokerDTO;
+import com.btb.usersorganizationservice.dto.UserInfoDTO;
 import com.btb.usersorganizationservice.entity.Chat;
 import com.btb.usersorganizationservice.entity.Organization;
 import com.btb.usersorganizationservice.entity.User;
@@ -22,12 +23,14 @@ public interface BrokerService {
 
     void deleteBroker(Long brokerId) throws BrokerException, DBException;
 
-    List<User> getBrokerLikeNameOrEmail(String name) throws BrokerException;
+    UserInfoDTO getBrokerLikeNameOrEmail(String name) throws BrokerException;
 
-    User getBrokerById(Long brokerId) throws BrokerException;
+    UserInfoDTO getBrokerById(Long brokerId) throws BrokerException;
 
     void setBrokerToOrganization(Long brokerId, Organization organization) throws BrokerException, DBException;
 
     User findUserByEmail(String email);
+
+    User getBroker(Long brokerId) throws BrokerException;
 
 }

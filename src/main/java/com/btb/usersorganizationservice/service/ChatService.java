@@ -9,8 +9,8 @@ import java.util.List;
 
 public interface ChatService {
 
-    void addChat(Long recipientId, AddChatDTO addChatDTO) throws BrokerException, DBException;
+    void addChat(String email, AddChatDTO addChatDTO) throws BrokerException, DBException;
 
-    List<Chat> getChat(Long brokerId);
+    List<Chat> getChat(Long brokerId) throws BrokerException;
 
 }

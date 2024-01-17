@@ -24,16 +24,16 @@ public class ChatController {
         this.chatService = chatService;
     }
 
-    @PostMapping("/{recipientId}")
-    public void addChat(@PathVariable("recipientId") Long recipientId, @RequestBody AddChatDTO addChatDTO) throws DBException, BrokerException {
-        log.info("POST /chat/{}", recipientId);
+    @PostMapping("/{email}")
+    public void addChat(@PathVariable("email") String email, @RequestBody AddChatDTO addChatDTO) throws DBException, BrokerException {
+        log.info("POST /chat/{}", email);
 
-        log.info("Event: Add chat: {}", recipientId);
-        chatService.addChat(recipientId, addChatDTO);
+        log.info("Event: Add chat: {}", email);
+        chatService.addChat(email, addChatDTO);
     }
 
-    @PostMapping("/{brokerId}")
-    public List<Chat> getChat(@PathVariable("brokerId") Long brokerId) {
+    @GetMapping("/get/{brokerId}")
+    public List<Chat> getChat(@PathVariable("brokerId") Long brokerId) throws BrokerException {
         log.info("GET /chat/{}", brokerId);
 
         log.info("Event: Get chat: {}", brokerId);

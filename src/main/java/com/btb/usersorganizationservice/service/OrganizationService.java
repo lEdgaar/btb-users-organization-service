@@ -5,6 +5,7 @@ import com.btb.usersorganizationservice.entity.Organization;
 import com.btb.usersorganizationservice.exception.BrokerException;
 import com.btb.usersorganizationservice.exception.DBException;
 import com.btb.usersorganizationservice.exception.OrganizationException;
+import com.btb.usersorganizationservice.exception.RoleTypeException;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public interface OrganizationService {
 
     List<Organization> getOrganizations();
 
-    void addOrganization(AddOrganizationDTO addOrganizationDTO) throws DBException;
+    void addOrganization(AddOrganizationDTO addOrganizationDTO) throws DBException, BrokerException, RoleTypeException;
 
     void updateOrganization(Long organizationId, AddOrganizationDTO addOrganizationDTO) throws OrganizationException, DBException;
 

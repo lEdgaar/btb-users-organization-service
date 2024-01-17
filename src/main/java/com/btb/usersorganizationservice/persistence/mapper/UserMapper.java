@@ -6,7 +6,5 @@ import java.util.List;
 
 public interface UserMapper extends CommonMapper<User, Long>{
 
-    List<User> findByName(String name);
-
     User findByEmail(String email);
 }

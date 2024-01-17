@@ -42,7 +42,7 @@ public class AdministrationServiceImpl implements AdministrationService {
     public void banUser(BanUserDTO banUserDTO) throws BrokerException, DBException {
         log.trace("Ban user: {}", banUserDTO.getUserId());
 
-        User user = brokerService.getBrokerById(banUserDTO.getUserId());
+        User user = brokerService.getBroker(banUserDTO.getUserId());
 
         user.setBlocked(true);
         user.setDateBlocked(new Date());

@@ -1,6 +1,7 @@
 package com.btb.usersorganizationservice.controller;
 
 import com.btb.usersorganizationservice.dto.LoginDTO;
+import com.btb.usersorganizationservice.dto.TokenDTO;
 import com.btb.usersorganizationservice.exception.BrokerException;
 import com.btb.usersorganizationservice.service.UserService;
 import lombok.extern.log4j.Log4j2;
@@ -19,20 +20,12 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/login")
-    public @ResponseBody String login(@RequestBody LoginDTO loginDTO) throws BrokerException {
+    @PostMapping("/login")
+    public @ResponseBody TokenDTO login(@RequestBody LoginDTO loginDTO) throws BrokerException {
         log.info("POST /login - email: {}", loginDTO.getEmail());
 
         log.info("ImportantEvent: User login: email: {}", loginDTO.getEmail());
         return userService.login(loginDTO);
-    }
-
-    @PostMapping("/logout")
-    public void logout(@RequestParam String token) {
-        log.info("POST /logout");
-
-        log.info("ImportantEvent: User logout");
-        userService.logout(token);
     }
 
 }

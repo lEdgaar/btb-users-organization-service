@@ -3,6 +3,7 @@ package com.btb.usersorganizationservice.service.imp;
 import com.btb.usersorganizationservice.dto.AddBrokerDTO;
 import com.btb.usersorganizationservice.dto.AddChatDTO;
 import com.btb.usersorganizationservice.dto.UpdateBrokerDTO;
+import com.btb.usersorganizationservice.dto.UserInfoDTO;
 import com.btb.usersorganizationservice.entity.Chat;
 import com.btb.usersorganizationservice.entity.Organization;
 import com.btb.usersorganizationservice.entity.User;
@@ -22,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -53,6 +55,10 @@ public class BrokerServiceImpl implements BrokerService {
             throw new BrokerException(BrokerErrorCode.USER_ALREADY_EXISTS, BrokerErrorCode.USER_ALREADY_EXISTS.getKey());
         }
 
+        if (addBrokerDTO.getRoleTypeId() == null) {
+            addBrokerDTO.setRoleTypeId(RoleTypeMD.BROKER.getInternalCode());
+        }
+
         User user = User
                 .builder()
                 .email(addBrokerDTO.getEmail())
@@ -64,7 +70,7 @@ public class BrokerServiceImpl implements BrokerService {
                 .createdAt(new Date())
                 .lastPasswordDate(new Date())
                 .country(countryService.getCountryByCountryCode(addBrokerDTO.getCountryCode()))
-                .roleType(roleTypeService.getRoleTypeByInternalCode(RoleTypeMD.BROKER.getInternalCode()))
+                .roleType(roleTypeService.getRoleTypeByInternalCode(addBrokerDTO.getRoleTypeId()))
                 .build();
 
         if (userMapper.save(user) != 1) {
@@ -113,7 +119,7 @@ public class BrokerServiceImpl implements BrokerService {
     }
 
     @Override
-    public List<User> getBrokerLikeNameOrEmail(String name) throws BrokerException {
+    public UserInfoDTO getBrokerLikeNameOrEmail(String name) throws BrokerException {
         log.info("Searching broker by name: {}", name);
 
         if (!StringUtils.hasText(name)) {
@@ -121,17 +127,37 @@ public class BrokerServiceImpl implements BrokerService {
             throw new BrokerException(BrokerErrorCode.NAME_OR_EMAIL_NOT_NULL, BrokerErrorCode.NAME_OR_EMAIL_NOT_NULL.getKey());
         }
 
-        List<User> brokerList =  userMapper.findByName(name);
-        brokerList.add(userMapper.findByEmail(name));
+        User infoUser =  userMapper.findByEmail(name);
 
-        return brokerList;
+        if (infoUser != null) {
+            UserInfoDTO user = new UserInfoDTO();
+
+            user.setUserId(infoUser.getId());
+            user.setFirstName(infoUser.getFirstName());
+            user.setSurname(infoUser.getSurname());
+            user.setGender(infoUser.getGender());
+            user.setDateOfBirth(infoUser.getDateOfBirth());
+
+
+            return user;
+        }
+
+        return null;
     }
 
     @Override
-    public User getBrokerById(Long brokerId) throws BrokerException {
+    public UserInfoDTO getBrokerById(Long brokerId) throws BrokerException {
         log.info("Searching broker by id: {}", brokerId);
 
-        return getBroker(brokerId);
+        User user = getBroker(brokerId);
+        UserInfoDTO userInfoDTO = new UserInfoDTO();
+        userInfoDTO.setUserId(user.getId());
+        userInfoDTO.setFirstName(user.getFirstName());
+        userInfoDTO.setSurname(user.getSurname());
+        userInfoDTO.setGender(user.getGender());
+        userInfoDTO.setDateOfBirth(user.getDateOfBirth());
+
+        return userInfoDTO;
     }
 
     @Override
@@ -155,8 +181,8 @@ public class BrokerServiceImpl implements BrokerService {
         return userMapper.findByEmail(email);
     }
 
-
-    private User getBroker(Long brokerId) throws BrokerException {
+    @Override
+    public User getBroker(Long brokerId) throws BrokerException {
         if (brokerId == null) {
             throw new BrokerException(BrokerErrorCode.USER_ID_NOT_NULL, BrokerErrorCode.USER_ID_NOT_NULL.getKey());
         }

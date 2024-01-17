@@ -25,12 +25,12 @@ public class ChatServiceImpl implements ChatService {
     private ChatMapper chatMapper;
 
     @Override
-    public void addChat(Long recipientId, AddChatDTO addChatDTO) throws BrokerException, DBException {
-        log.info("Adding chat: {}", recipientId);
+    public void addChat(String email, AddChatDTO addChatDTO) throws BrokerException, DBException {
+        log.info("Adding chat: {}", email);
 
         Chat chat = new Chat();
-        chat.setUserRecivedId(brokerService.getBrokerById(recipientId));
-        chat.setUserSendedId(brokerService.getBrokerById(addChatDTO.getBrokerId()));
+        chat.setUserRecivedId(brokerService.getBroker(brokerService.getBrokerLikeNameOrEmail(email).getUserId()));
+        chat.setUserSendedId(brokerService.getBroker(brokerService.getBrokerLikeNameOrEmail(addChatDTO.getEmail()).getUserId()));
         chat.setMessage(addChatDTO.getMessage());
         chat.setCreatedAt(new Date());
 
@@ -38,12 +38,15 @@ public class ChatServiceImpl implements ChatService {
             throw new DBException("Error adding chat");
         }
 
-        log.info("Chat: {} added", recipientId);
+        log.info("Chat: {} added", email);
     }
 
     @Override
-    public List<Chat> getChat(Long brokerId) {
-        return null;
+    public List<Chat> getChat(Long brokerId) throws BrokerException {
+        Chat chat = new Chat();
+        chat.setUserRecivedId(brokerService.getBroker(brokerId));
+
+        return chatMapper.findByFilter(chat);
     }
 
 }

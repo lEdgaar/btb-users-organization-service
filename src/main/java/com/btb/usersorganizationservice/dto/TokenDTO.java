@@ -9,10 +9,12 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddChatDTO {
+public class TokenDTO {
 
-    private String email;
+    private String token;
 
-    private String message;
+    private String role;
+
+    private Long userId;
 
 }
